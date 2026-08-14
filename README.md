@@ -1,65 +1,11 @@
-# TaskFlow (App de Exemplo) — Disciplina DevSecOps
+1. O que você entendeu pela expressão "shift-left security"?
 
-Esta é a aplicação de laboratório usada em **todos os encontros práticos** da
-disciplina. É um gerenciador de tarefas (to-do list) simples em Python/Flask,
-propositalmente vulnerável, que evolui ao longo do curso:
+Shift-left security significa pensar em segurança desde o início do desenvolvimento, e não apenas quando o sistema já está pronto. A ideia é identificar vulnerabilidades o mais cedo possível, durante o planejamento, desenvolvimento e testes. Dessa forma, os problemas podem ser corrigidos antes de chegarem à produção, evitando retrabalho e reduzindo os riscos.
 
-- Módulos 1–2: usada para discutir arquitetura, pipeline e hardening.
-- Módulo 3: alvo de SAST (Semgrep) e SCA (pip-audit / Trivy) — os alunos
-  encontram SQLi, XSS, segredo hardcoded e dependências vulneráveis.
-- Módulo 4: alvo de DAST (OWASP ZAP) rodando contra a aplicação em execução.
-- Módulo 5: containerizada com Docker e provisionada via Docker Compose,
-  usada para praticar scanning de IaC.
-- Módulo 6: instrumentada com logging estruturado para observabilidade.
-- Módulo 7: base do projeto final — os alunos entregam a versão corrigida
-  com a esteira DevSecOps completa.
+2. Cite pelo menos uma vulnerabilidade observada no TaskFlow e explique por que ela pode ser um problema.
 
-## ⚠️ Aviso importante
+Um problema observado no TaskFlow foi o uso de credenciais muito simples, como `admin/admin123`. Uma senha desse tipo é fácil de descobrir ou tentar em um ataque de força bruta. Caso isso aconteça em uma aplicação real, um invasor poderia conseguir acesso a uma conta administrativa e obter permissões que não deveria possuir.
 
-Este código contém vulnerabilidades **intencionais** para fins didáticos
-(ver comentários `# FALHA` e docstring no topo de `app.py`). Nunca:
+3. Por que esperar até o fim do desenvolvimento para pensar em segurança é arriscado?
 
-- Use este código como referência de boas práticas.
-- Implante esta aplicação em ambiente de produção ou exposto à internet.
-- Reutilize o padrão de código (concatenação de SQL, senhas em texto puro,
-  segredo hardcoded) em projetos reais.
-
-## Como executar localmente
-
-```bash
-cd app-exemplo
-python3 -m venv .venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
-
-A aplicação sobe em `http://localhost:5000`. Usuários de teste já vêm
-cadastrados no banco SQLite (`taskflow.db`, criado automaticamente):
-
-| Usuário | Senha    |
-|---------|----------|
-| admin   | admin123 |
-| aluno   | senha123 |
-
-## Como executar com Docker
-
-```bash
-cd app-exemplo
-docker build -t taskflow:vuln .
-docker run -p 5000:5000 taskflow:vuln
-```
-
-## Estrutura
-
-```
-app-exemplo/
-├── app.py              # Aplicação Flask (versão vulnerável, linha de base)
-├── requirements.txt    # Dependências com CVEs conhecidas (uso proposital)
-├── Dockerfile           # Dockerfile inseguro (uso no Módulo 2 - Hardening)
-└── README.md            # Este arquivo
-```
-
-Cada módulo cria, dentro da sua própria pasta `codigo/`, uma cópia ou um
-patch desta aplicação demonstrando o "antes" (vulnerável) e o "depois"
-(corrigido) referente ao tema daquele encontro.
+Porque uma vulnerabilidade descoberta no final pode exigir mudanças em partes que já estavam consideradas prontas. Isso aumenta o retrabalho, o custo e o tempo necessário para corrigir o problema. Além disso, existe o risco de alguma falha não ser encontrada antes da aplicação entrar em produção. Por isso, faz mais sentido realizar verificações de segurança durante todo o desenvolvimento.
