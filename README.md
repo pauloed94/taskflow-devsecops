@@ -8,5 +8,58 @@ Um problema observado no TaskFlow foi o uso de credenciais muito simples, como `
 
 3. Por que esperar até o fim do desenvolvimento para pensar em segurança é arriscado?
 
+<<<<<<< HEAD
 Porque uma vulnerabilidade descoberta no final pode exigir mudanças em partes que já estavam consideradas prontas. Isso aumenta o retrabalho, o custo e o tempo necessário para corrigir o problema. Além disso, existe o risco de alguma falha não ser encontrada antes da aplicação entrar em produção. Por isso, faz mais sentido realizar verificações de segurança durante todo o desenvolvimento.
 "# Teste de Pull Request para validar o CI" 
+=======
+- Use este código como referência de boas práticas.
+- Implante esta aplicação em ambiente de produção ou exposto à internet.
+- Reutilize o padrão de código (concatenação de SQL, senhas em texto puro,
+  segredo hardcoded) em projetos reais.
+
+## Como executar localmente
+
+```bash
+cd app-exemplo
+python3 -m venv .venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+
+A aplicação sobe em `http://localhost:5000`. Usuários de teste já vêm
+cadastrados no banco SQLite (`taskflow.db`, criado automaticamente):
+
+| Usuário | Senha    |
+|---------|----------|
+| admin   | admin123 |
+| aluno   | senha123 |
+
+## Como executar com Docker
+
+```bash
+cd app-exemplo
+docker build -t taskflow:vuln .
+docker run -p 5000:5000 taskflow:vuln
+```
+
+## Estrutura
+
+```
+app-exemplo/
+├── app.py              # Aplicação Flask (versão vulnerável, linha de base)
+├── requirements.txt    # Dependências com CVEs conhecidas (uso proposital)
+├── Dockerfile           # Dockerfile inseguro (uso no Módulo 2 - Hardening)
+└── README.md            # Este arquivo
+```
+
+Cada módulo cria, dentro da sua própria pasta `codigo/`, uma cópia ou um
+patch desta aplicação demonstrando o "antes" (vulnerável) e o "depois"
+(corrigido) referente ao tema daquele encontro.
+
+## Teste de proteção do branch
+
+Mudança de teste.
+
+Teste 3 - A hora de morrer
+>>>>>>> df2ce718c6cb12012502414f0cff7dcd29349014
